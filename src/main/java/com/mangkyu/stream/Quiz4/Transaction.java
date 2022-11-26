@@ -42,4 +42,5 @@ public class Transaction {
     public String toString() {
         return String.format("{%s, year: %d, value: %d}", trader, year, value);
     }
+
 }

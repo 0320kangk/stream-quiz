@@ -29,7 +29,6 @@ public class Answer4 {
                 new Transaction(hwan, 2020, 4900)
         );
     }
-
     public List<Transaction> quiz1() {
         return transactions.stream()
                 .filter(t -> t.getYear() == 2020)

@@ -1,8 +1,12 @@
 package com.mangkyu.stream.Quiz6;
 
+import com.mangkyu.stream.Quiz5.Quiz5;
+
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class Quiz6 {
 
@@ -13,11 +17,24 @@ public class Quiz6 {
     }
 
     public Map<Boolean, List<Student>> quiz1() {
-        return new HashMap<>();
+        return Arrays.stream(stuArr)
+                .filter( student -> {
+                    return student.getScore() < 150;
+                })
+                .collect(Collectors.groupingBy(Student::isMale));
     }
 
     public Map<Integer, Map<Integer, Integer>> quiz2() {
-        return new HashMap<>();
+
+        /**
+         * 1. groupingBy를 통해 학년으로 학생들을 묶는다.
+         * 2. groupingBy를 한번 더 하여 반 별로 묶는다.
+         * 3. 묶은 학생들의 점수를 합한다.
+         */
+        return Arrays.stream(stuArr)
+                .collect(Collectors.groupingBy( Student::getHak,
+                        Collectors.groupingBy( Student::getBan, Collectors.summingInt( Student::getScore))));
+
     }
 
     private void init() {
@@ -42,6 +59,10 @@ public class Quiz6 {
                 new Student("이자바", true, 2, 3, 200)
         };
 
+    }
+
+    public static void main(String[] args) {
+        new Quiz6().quiz2();
     }
 
 }

@@ -1,9 +1,8 @@
 package com.mangkyu.stream.Quiz4;
 
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class Quiz4 {
 
@@ -28,33 +27,87 @@ public class Quiz4 {
                 new Transaction(hwan, 2020, 4900)
         );
     }
-
     public List<Transaction> quiz1() {
-        return Collections.emptyList();
+
+        return  transactions.stream()
+                .filter( transaction -> {
+                    return transaction.getYear() >= 2020;
+                }).sorted(Comparator.comparing( (transaction -> {
+                    return transaction.getValue();
+                }))).collect(Collectors.toList());
     }
 
     public List<String> quiz2() {
-        return Collections.emptyList();
+
+        return transactions.stream()
+                .map( transaction -> {
+                    return transaction.getTrader().getCity();
+                }).distinct()
+                .collect(Collectors.toList());
     }
 
     public List<Trader> quiz3() {
-        return Collections.emptyList();
+
+        return transactions.stream()
+                .filter( (transaction -> {
+                    return transaction.getTrader().getCity().equals("Seoul");
+                }))
+                .map( Transaction::getTrader )
+                .distinct()
+                .sorted(Comparator.comparing( trader -> {
+                    return trader.getName();
+                } ) )
+                .collect(Collectors.toList());
+
     }
 
     public String quiz4() {
-        return null;
+
+        return transactions.stream()
+                .map( transaction -> {
+                    return transaction.getTrader().getName();
+                })
+                .distinct()
+                .sorted()
+                .collect(Collectors.joining(","));
     }
 
     public boolean quiz5() {
-        return false;
+
+        return transactions.stream()
+                .anyMatch( transaction -> {
+                    return transaction.getTrader().getCity().equals("Busan");
+                });
     }
 
     public List<Integer> quiz6() {
-        return Collections.emptyList();
+        return transactions.stream()
+                .filter( (transaction -> {
+                    return transaction.getTrader().getCity().equals("Seoul");
+                }))
+                .map( transaction -> {
+                    return transaction.getValue();
+                })
+                .collect(Collectors.toList());
     }
 
     public Integer[] quiz7() {
-        return new Integer[]{0, 0};
+
+        Integer[] results = new Integer[2];
+        results[0] = transactions.stream()
+                .mapToInt(transaction -> transaction.getValue())
+                .reduce(Integer::max).orElse(0);
+
+        results[1]  = transactions.stream()
+                .mapToInt(transaction -> transaction.getValue())
+                .min().orElse(0);
+
+        return results;
     }
+
+    public static void main(String[] args) {
+        new Quiz4().quiz3();
+    }
+
 
 }
